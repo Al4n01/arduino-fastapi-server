@@ -49,7 +49,7 @@ async def upload_code(code: str = Form(...)):
 
         compile_command = [
             "arduino-cli",
-            "--data-dir", arduino_data_dir, # ¡Añadimos esta bandera para especificar el directorio de datos!
+            "--config-dir", arduino_data_dir, # ¡CORREGIDO: Ahora usa --config-dir para el comando compile!
             "compile", 
             "--fqbn", "arduino:avr:uno", # Fully Qualified Board Name para Arduino Uno
             ino_path
