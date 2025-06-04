@@ -41,8 +41,16 @@ async def upload_code(code: str = Form(...)):
         # --- Parte de compilación con arduino-cli ---
         # Este comando intenta compilar el sketch para la placa Arduino Uno.
         # Render debe tener 'arduino-cli' y el core 'arduino:avr' instalados en el entorno.
+        
+        # Define el directorio de datos para arduino-cli.
+        # Usamos os.environ.get para leer la variable de entorno ARDUINO_DATA_DIR,
+        # proporcionando un valor predeterminado si no está configurada (útil para desarrollo local).
+        arduino_data_dir = os.environ.get("ARDUINO_DATA_DIR", "/tmp/.arduino15")
+
         compile_command = [
-            "arduino-cli", "compile", 
+            "arduino-cli",
+            "--data-dir", arduino_data_dir, # ¡Añadimos esta bandera para especificar el directorio de datos!
+            "compile", 
             "--fqbn", "arduino:avr:uno", # Fully Qualified Board Name para Arduino Uno
             ino_path
         ]
@@ -100,4 +108,3 @@ async def upload_code(code: str = Form(...)):
         # independientemente de si hubo un error o no.
         if os.path.exists(current_sketch_path):
             shutil.rmtree(current_sketch_path)
-
